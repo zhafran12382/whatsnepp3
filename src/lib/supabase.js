@@ -1,12 +1,19 @@
 import { createClient } from '@supabase/supabase-js'
 
 // Supabase configuration
-// Replace these with your actual Supabase project credentials
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key'
+// Set these environment variables in your .env file (see .env.example)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+// Validate configuration
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error(
+    'Missing Supabase configuration. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file.'
+  )
+}
 
 // Create Supabase client with session storage for auto-logout on tab close
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
   auth: {
     // Use sessionStorage for auto-logout on tab close
     storage: typeof window !== 'undefined' ? window.sessionStorage : undefined,
